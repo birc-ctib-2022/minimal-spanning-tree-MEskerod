@@ -9,6 +9,9 @@ import sys
 from prim_eloge import (prim, Edge)
 from prim_eloge import Graph as Graph_eloge
 
+from prim_elogv import prim as prim_elogv
+from prim_elogv import Graph as Graph_elogv
+
 
 """Tests for prim_eloge"""
 def build_graph_eloge(): 
@@ -79,3 +82,53 @@ def test_graph_for_prim(capsys) -> None:
 
 
 """Tests for prim_elogv"""
+def build_graph_elogv(): 
+    graph1 = Graph_elogv(
+        (
+            (0, 0.1, 2),
+            (0, 2, 1),
+            (2, 12, 3),
+            (3, 2, 0),
+            (3, 0.2, 4),
+            (4, 1, 5),
+            (5, 1, 2)
+        )
+    )
+
+    graph2 = Graph_elogv(
+        (
+            (0, 3, 1),
+            (0, 6, 3),
+            (0, 9, 9),
+            (1, 2, 2),
+            (1, 4, 3),
+            (1, 9, 4),
+            (1, 9, 9),
+            (2, 2, 3),
+            (2, 8, 4),
+            (2, 9, 5),
+            (3, 9, 5),
+            (4, 7, 5), 
+            (4, 9, 7),
+            (4, 10, 8),
+            (4, 8, 9),
+            (5, 4, 6),
+            (5, 5, 7),
+            (6, 1, 7),
+            (6, 4, 8),
+            (7, 3, 8),
+            (8, 18, 9)
+        )
+    )
+    return graph1, graph2
+
+def test_prim() -> None:
+    graph1, graph2 = build_graph_elogv()
+    assert prim_elogv(graph1) == [(0, 0.1, 2), (2, 1, 5), (5, 1, 4), (4, 0.2, 3), (0, 2, 1)]
+
+def test_graph_for_prim(capsys) -> None: 
+    graph1, graph2 = build_graph_elogv()
+    Graph_elogv(prim_elogv(graph1)).to_dot(sys.stdout)
+    out, err = capsys.readouterr()
+    assert out == 'graph { rankdir=LR;\n0 -- 2 [label="0.1"]\n0 -- 1 [label="2"]\n'\
+        '2 -- 5 [label="1"]\n3 -- 4 [label="0.2"]\n4 -- 5 [label="1"]\n}\n'
