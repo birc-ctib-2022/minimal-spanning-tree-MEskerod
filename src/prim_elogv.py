@@ -223,8 +223,19 @@ def prim(graph: Graph) -> list[Edge]:
     # the tree.
 
     # FIXME: Algorithm needed here!
-    ...
-
+    first = heap.pop()
+    edges_out = graph.edges[first[2]]
+    for edge in edges_out: 
+        src, w, n = edge[0], edge[1], edge[2]
+        heap.decrease_weight(n, w, src)
+    while heap._nodes:
+        new_node = heap.pop()
+        if new_node[0] is not None:
+            tree.append(new_node)
+            edges_out = graph.edges[new_node[2]]
+            for edge in graph.edges[new_node[2]]:
+                src, w, n = edge[0], edge[1], edge[2]
+                heap.decrease_weight(n, w, src)
     return tree
 
 
@@ -240,5 +251,35 @@ if __name__ == '__main__':
             (5, 1, 2)
         )
     )
+
+    graph2 = Graph(
+        (
+            (0, 3, 1),
+            (0, 6, 3),
+            (0, 9, 9),
+            (1, 2, 2),
+            (1, 4, 3),
+            (1, 9, 4),
+            (1, 9, 9),
+            (2, 2, 3),
+            (2, 8, 4),
+            (2, 9, 5),
+            (3, 9, 5),
+            (4, 7, 5), 
+            (4, 9, 7),
+            (4, 10, 8),
+            (4, 8, 9),
+            (5, 4, 6),
+            (5, 5, 7),
+            (6, 1, 7),
+            (6, 4, 8),
+            (7, 3, 8),
+            (8, 18, 9)
+        )
+    )
     # graph.to_dot()
-    Graph(prim(graph)).to_dot()
+    #Graph(prim(graph)).to_dot()
+
+    #print(prim(graph))
+
+    print(prim(graph2))
