@@ -125,6 +125,8 @@ def build_graph_elogv():
 def test_prim() -> None:
     graph1, graph2 = build_graph_elogv()
     assert prim_elogv(graph1) == [(0, 0.1, 2), (2, 1, 5), (5, 1, 4), (4, 0.2, 3), (0, 2, 1)]
+    assert prim_elogv(graph2) == [(0, 3, 1), (1, 2, 2), (2, 2, 3), (2, 8, 4), 
+    (4, 7, 5), (5, 4, 6), (6, 1, 7), (7, 3, 8), (4, 8, 9)]
 
 def test_graph_for_prim(capsys) -> None: 
     graph1, graph2 = build_graph_elogv()
@@ -132,3 +134,11 @@ def test_graph_for_prim(capsys) -> None:
     out, err = capsys.readouterr()
     assert out == 'graph { rankdir=LR;\n0 -- 2 [label="0.1"]\n0 -- 1 [label="2"]\n'\
         '2 -- 5 [label="1"]\n3 -- 4 [label="0.2"]\n4 -- 5 [label="1"]\n}\n'
+    
+
+    Graph_elogv(prim_elogv(graph2)).to_dot(sys.stdout)
+    out, err = capsys.readouterr()
+    assert out == 'graph { rankdir=LR;\n0 -- 1 [label="3"]\n1 -- 2 [label="2"]\n'\
+        '2 -- 3 [label="2"]\n2 -- 4 [label="8"]\n4 -- 5 [label="7"]\n4 -- 9 '\
+            '[label="8"]\n5 -- 6 [label="4"]\n6 -- 7 [label="1"]\n7 -- 8 [label="3"]\n}\n'
+
